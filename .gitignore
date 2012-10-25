@@ -1,7 +1,12 @@
 *.py[co]
 
+# Folders
+#texture/*
+#model/*
+#blend/*
+
 # Packages
-*.egg
+#*.egg
 *.egg-info
 dist
 build
