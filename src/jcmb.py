@@ -8,6 +8,7 @@ class EscapeFromJCMB(object,DirectObject):
 
 	def __init__(self):
 		self.init_window()
+		self.init_music()
 		self.init_collision()
 		self.init_key()
 		self.load_world()
@@ -20,6 +21,10 @@ class EscapeFromJCMB(object,DirectObject):
 		props = WindowProperties()
 		props.setCursorHidden(True) 
 		base.win.requestProperties(props)
+
+	def init_music(self):
+		music = base.loader.loadSfx("../data/snd/Bent_and_Broken.mp3")
+		music.play()
 
 	def init_collision(self):
 		base.cTrav = CollisionTraverser()
@@ -66,7 +71,7 @@ class EscapeFromJCMB(object,DirectObject):
 		# Make our character node
 		self.player = render.attachNewNode(ActorNode('playerNode'))
 		self.player.reparentTo(render)
-		self.player.setPos(0,40,-60)
+		self.player.setPos(0,40,-50)
 		self.player.setH(180)
 		
 		base.physicsMgr.attachPhysicalNode(self.player.node())
@@ -92,6 +97,7 @@ class EscapeFromJCMB(object,DirectObject):
 #		torch = DirectionalLight('torch')
 
 		torch.setColor(VBase4(1, 1, 1, 1))
+#		torch.setShadowCaster(True, 16, 16)
 		lens = PerspectiveLens()
 		lens.setFov(120)
 		lens.setNearFar(40, 300)
@@ -109,7 +115,7 @@ class EscapeFromJCMB(object,DirectObject):
 	def init_objects(self):
 		self.playferbox = render.attachNewNode(ActorNode('playferbox'))
 		self.playferbox.reparentTo(render)
-		self.playferbox.setPos(0,15,-50)
+		self.playferbox.setPos(0,15,0)
 		base.physicsMgr.attachPhysicalNode(self.playferbox.node())
 
 		col_node = CollisionNode('playferbox')
@@ -157,7 +163,7 @@ class EscapeFromJCMB(object,DirectObject):
 	    		base.camera.setP(base.camera.getP() - (y - base.win.getYSize()/2) * 0.25)
 		
 		# Update player position
-		self.player_speed = 50
+		self.player_speed = 30
 		new_x = 0.0
 		new_y = 0.0
 		if (self.key_state["left"] == 1):
