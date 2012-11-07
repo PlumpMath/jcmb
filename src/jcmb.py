@@ -25,6 +25,7 @@ class EscapeFromJCMB(object,DirectObject):
 	def init_music(self):
 		music = base.loader.loadSfx("../data/snd/Bent_and_Broken.mp3")
 		music.play()
+		self.playferscream = base.loader.loadSfx("../data/snd/deadscrm.wav")
 
 	def init_collision(self):
 		base.cTrav = CollisionTraverser()
@@ -115,42 +116,33 @@ class EscapeFromJCMB(object,DirectObject):
 	def init_objects(self):
 		self.playferbox = render.attachNewNode(ActorNode('playferbox'))
 		self.playferbox.reparentTo(render)
-		self.playferbox.setPos(0,15,0)
+		self.playferbox.setPos(-6,-170, 0)
 		base.physicsMgr.attachPhysicalNode(self.playferbox.node())
 
 		col_node = CollisionNode('playferbox')
-		col_node.addSolid(CollisionSphere(0, 0, 0, 1))
+		col_node.addSolid(CollisionSphere(-.5, -.5, -.5, .35))
+		col_node.addSolid(CollisionSphere(.5, -.5, -.5, .35))
+		col_node.addSolid(CollisionSphere(-.5, .5, -.5, .35))
+		col_node.addSolid(CollisionSphere(.5, .5, -.5, .35))
+		col_node.addSolid(CollisionSphere(-.5, -.5, .5, .35))
+		col_node.addSolid(CollisionSphere(.5, -.5, .5, .35))
+		col_node.addSolid(CollisionSphere(-.5, .5, .5, .35))
+		col_node.addSolid(CollisionSphere(.5, .5, .5, .35))
 		col_node_path = self.playferbox.attachNewNode(col_node)
 		base.cTrav.addCollider(col_node_path, self.pusher)
 		self.pusher.addCollider(col_node_path, self.playferbox, base.drive.node())
 
 		playferboxmodel = loader.loadModel('../data/mod/playferbox.egg')
+		playferboxmodel.setH(90)
 		playferboxmodel.reparentTo(self.playferbox)
 
-#		self.playferbox = loader.loadModel('../data/mod/playferbox.egg')
-#		self.playferbox.reparentTo(render)
-#		self.playferbox.setPos(0,15,-60)
+#		self.playferbox = render.attachNewNode (ActorNode("playferbox")) 
+#		playferboxmodel = loader.loadModel('../data/mod/playferbox.egg')
+#		playferboxmodel.reparentTo(self.playferbox)
+#		base.physicsMgr.attachPhysicalNode(self.playferbox.node())
 #
-#		playferbox_actor = self.playferbox.attachNewNode(ActorNode('playferbox'))
-#		base.physicsMgr.attachPhysicalNode(playferbox_actor.node())
-#		col_node = CollisionNode('playferbox')
-#		col_node.addSolid(CollisionSphere(0, 0, 0, 1))
-#		col_node_path = playferbox_actor.attachNewNode(col_node)
-#		base.cTrav.addCollider(col_node_path, self.pusher)
-#		self.pusher.addCollider(col_node_path, playferbox_actor, base.drive.node())
-
-	def makeCollisionNodePath(self, nodepath, solid):
-		# Creates a collision node named after the name of the NodePath.
-		collNode = CollisionNode("%s c_node" % nodepath.getName()) 
-		collNode.addSolid(solid)
-		collisionNodepath = nodepath.attachNewNode(collNode)
-		# Show the collision node, which makes the solids show up.
-		collisionNodepath.show()
- 		
-		return collisionNodepath
-		
-
-
+#		base.cTrav.addCollider(self.playferbox, self.pusher)
+#		self.pusher.addCollider(self.playferbox, self.playferbox, base.drive.node())
 
 	def update(self,task):
        
@@ -163,7 +155,7 @@ class EscapeFromJCMB(object,DirectObject):
 	    		base.camera.setP(base.camera.getP() - (y - base.win.getYSize()/2) * 0.25)
 		
 		# Update player position
-		self.player_speed = 30
+		self.player_speed = 40
 		new_x = 0.0
 		new_y = 0.0
 		if (self.key_state["left"] == 1):
@@ -179,6 +171,18 @@ class EscapeFromJCMB(object,DirectObject):
 		new_pos = Vec3(new_x, new_y, 0) * dt
 		self.player.setFluidPos(self.player, new_pos)
 		
+		# Update steve
+		new_pos = (self.player.getPos() - self.playferbox.getPos())
+		if new_pos.length() < 50:
+			new_pos.normalize()
+			new_pos *= 40 * dt
+			self.playferbox.setFluidPos(self.playferbox, new_pos)
+			self.playferscream.setVolume(50.0/new_pos.length())
+			if self.playferscream.status() == self.playferscream.READY:
+				self.playferscream.play()
+		else:
+			self.playferscream.setVolume(0.0)			
+
 		return task.cont
 
 base.setFrameRateMeter(True)
