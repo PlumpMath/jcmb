@@ -7,11 +7,19 @@ from pandac.PandaModules import *
 class EscapeFromJCMB(object,DirectObject):
 
 	def __init__(self):
+		self.init_window()
 		self.init_collision()
 		self.init_key()
 		self.load_world()
 		self.init_player()
+		self.init_objects()
        
+
+	def init_window(self):
+		# Hide the mouse cursor
+		props = WindowProperties()
+		props.setCursorHidden(True) 
+		base.win.requestProperties(props)
 
 	def init_collision(self):
 		base.cTrav = CollisionTraverser()
@@ -49,7 +57,7 @@ class EscapeFromJCMB(object,DirectObject):
 
 
 	def load_world(self):
-		self.world = loader.loadModel('../data/mod/corridor.egg')
+		self.world = loader.loadModel('../data/mod/panicroom.egg')
 		self.world.reparentTo(render)
 		self.world.setPos(0,0,0)
 		self.world.setH(90);
@@ -58,7 +66,8 @@ class EscapeFromJCMB(object,DirectObject):
 		# Make our character node
 		self.player = render.attachNewNode(ActorNode('playerNode'))
 		self.player.reparentTo(render)
-		self.player.setPos(0,40,0)
+		self.player.setPos(0,40,-60)
+		self.player.setH(180)
 		
 		base.physicsMgr.attachPhysicalNode(self.player.node())
 		
@@ -71,15 +80,21 @@ class EscapeFromJCMB(object,DirectObject):
 		
 		# Character has a collision sphere
 		col_node = CollisionNode('player')
-		col_node.addSolid(CollisionSphere(0, 0, 0, 1))
+		col_node.addSolid(CollisionSphere(0, 0, -1, 1.2))
+		col_node.addSolid(CollisionSphere(0, 0, -2, 1.2))
+		col_node.addSolid(CollisionSphere(0, 0, -3, 1.2))
 		col_node_path = self.player.attachNewNode(col_node)
 		base.cTrav.addCollider(col_node_path, self.pusher)
 		self.pusher.addCollider(col_node_path, self.player, base.drive.node())
        		
 		# Make the torch and attach it to our character
 		torch = Spotlight('torch')
+#		torch = DirectionalLight('torch')
+
 		torch.setColor(VBase4(1, 1, 1, 1))
 		lens = PerspectiveLens()
+		lens.setFov(120)
+		lens.setNearFar(40, 300)
 		torch.setLens(lens)
 		self.torchnp = base.camera.attachNewNode(torch)
 		self.torchnp.setPos(0, 0, 0)
@@ -91,6 +106,46 @@ class EscapeFromJCMB(object,DirectObject):
 		# Add the player update task
 		taskMgr.add(self.update, 'update_player_task')
 		
+	def init_objects(self):
+		self.playferbox = render.attachNewNode(ActorNode('playferbox'))
+		self.playferbox.reparentTo(render)
+		self.playferbox.setPos(0,15,-50)
+		base.physicsMgr.attachPhysicalNode(self.playferbox.node())
+
+		col_node = CollisionNode('playferbox')
+		col_node.addSolid(CollisionSphere(0, 0, 0, 1))
+		col_node_path = self.playferbox.attachNewNode(col_node)
+		base.cTrav.addCollider(col_node_path, self.pusher)
+		self.pusher.addCollider(col_node_path, self.playferbox, base.drive.node())
+
+		playferboxmodel = loader.loadModel('../data/mod/playferbox.egg')
+		playferboxmodel.reparentTo(self.playferbox)
+
+#		self.playferbox = loader.loadModel('../data/mod/playferbox.egg')
+#		self.playferbox.reparentTo(render)
+#		self.playferbox.setPos(0,15,-60)
+#
+#		playferbox_actor = self.playferbox.attachNewNode(ActorNode('playferbox'))
+#		base.physicsMgr.attachPhysicalNode(playferbox_actor.node())
+#		col_node = CollisionNode('playferbox')
+#		col_node.addSolid(CollisionSphere(0, 0, 0, 1))
+#		col_node_path = playferbox_actor.attachNewNode(col_node)
+#		base.cTrav.addCollider(col_node_path, self.pusher)
+#		self.pusher.addCollider(col_node_path, playferbox_actor, base.drive.node())
+
+	def makeCollisionNodePath(self, nodepath, solid):
+		# Creates a collision node named after the name of the NodePath.
+		collNode = CollisionNode("%s c_node" % nodepath.getName()) 
+		collNode.addSolid(solid)
+		collisionNodepath = nodepath.attachNewNode(collNode)
+		# Show the collision node, which makes the solids show up.
+		collisionNodepath.show()
+ 		
+		return collisionNodepath
+		
+
+
+
 	def update(self,task):
        
 		# Update camera orientation
@@ -102,7 +157,7 @@ class EscapeFromJCMB(object,DirectObject):
 	    		base.camera.setP(base.camera.getP() - (y - base.win.getYSize()/2) * 0.25)
 		
 		# Update player position
-		self.player_speed = 15
+		self.player_speed = 50
 		new_x = 0.0
 		new_y = 0.0
 		if (self.key_state["left"] == 1):
