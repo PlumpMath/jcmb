@@ -46,14 +46,14 @@ class EscapeFromJCMB(object,DirectObject):
 		self.key_state = {'up':0, 'right':0, 'down':0, 'left':0}
 
 		# Assign the key event handler
-		self.accept('arrow_up', self.set_key_state, ['up',1])
-		self.accept('arrow_up-up', self.set_key_state, ['up',0])
-		self.accept('arrow_right', self.set_key_state, ['right',1])
-		self.accept('arrow_right-up', self.set_key_state, ['right',0])
-		self.accept('arrow_down', self.set_key_state, ['down',1])
-		self.accept('arrow_down-up', self.set_key_state, ['down',0])
-		self.accept('arrow_left', self.set_key_state, ['left',1])
-		self.accept('arrow_left-up', self.set_key_state, ['left',0])
+		self.accept('w', self.set_key_state, ['up',1])
+		self.accept('w-up', self.set_key_state, ['up',0])
+		self.accept('d', self.set_key_state, ['right',1])
+		self.accept('d-up', self.set_key_state, ['right',0])
+		self.accept('s', self.set_key_state, ['down',1])
+		self.accept('s-up', self.set_key_state, ['down',0])
+		self.accept('a', self.set_key_state, ['left',1])
+		self.accept('a-up', self.set_key_state, ['left',0])
 		
 		# Esc
 		self.accept('escape', sys.exit)
