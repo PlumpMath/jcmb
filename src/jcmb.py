@@ -54,6 +54,8 @@ class EscapeFromJCMB(object,DirectObject):
     self.accept('s-up', self.set_key_state, ['down',0])
     self.accept('a', self.set_key_state, ['left',1])
     self.accept('a-up', self.set_key_state, ['left',0])
+
+    self.accept('z', self.print_pos)
     
     # Esc
     self.accept('escape', sys.exit)
@@ -61,6 +63,9 @@ class EscapeFromJCMB(object,DirectObject):
   def set_key_state(self, key, state):
     self.key_state[key] = state
 
+
+  def print_pos(self):
+	print self.player.getPos()
 
   def load_world(self):
     self.world = loader.loadModel('../data/mod/jcmbstairs.egg')
@@ -114,7 +119,7 @@ class EscapeFromJCMB(object,DirectObject):
   def init_objects(self):
     self.playferbox = render.attachNewNode(ActorNode('playferbox'))
     self.playferbox.reparentTo(render)
-    self.playferbox.setPos(-6,-170, 0)
+    self.playferbox.setPos(-10, -6, -10)
     base.physicsMgr.attachPhysicalNode(self.playferbox.node())
 
     col_node = CollisionNode('playferbox')
@@ -171,7 +176,7 @@ class EscapeFromJCMB(object,DirectObject):
     
     # Update steve
     new_pos = (self.player.getPos() - self.playferbox.getPos())
-    if new_pos.length() < 50:
+    if new_pos.length() < 14:
       new_pos.normalize()
       new_pos *= 40 * dt
       self.playferbox.setFluidPos(self.playferbox, new_pos)
