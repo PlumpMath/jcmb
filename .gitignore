@@ -1,9 +1,7 @@
 *.py[co]
 
 # Folders
-#texture/*
-#model/*
-#blend/*
+blend/*.blend[12345]
 
 # Packages
 #*.egg
