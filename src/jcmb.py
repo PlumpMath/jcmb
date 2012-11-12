@@ -22,6 +22,9 @@ class EscapeFromJCMB(object,DirectObject):
 		props.setCursorHidden(True) 
 		base.win.requestProperties(props)
 
+		# Place the mouse in the centre of the window
+		base.win.movePointer(0, base.win.getXSize()/2, base.win.getYSize()/2)
+
 	def init_music(self):
 		music = base.loader.loadSfx("../data/snd/Bent_and_Broken.mp3")
 		music.play()
@@ -63,7 +66,8 @@ class EscapeFromJCMB(object,DirectObject):
 
 
 	def load_world(self):
-		self.world = loader.loadModel('../data/mod/panicroom.egg')
+#		self.world = loader.loadModel('../data/mod/panicroom.egg')
+		self.world = loader.loadModel('../data/mod/jcmbstairs.egg')
 		self.world.reparentTo(render)
 		self.world.setPos(0,0,0)
 		self.world.setH(90);
@@ -72,7 +76,7 @@ class EscapeFromJCMB(object,DirectObject):
 		# Make our character node
 		self.player = render.attachNewNode(ActorNode('playerNode'))
 		self.player.reparentTo(render)
-		self.player.setPos(0,40,-50)
+		self.player.setPos(0,0,20)
 		self.player.setH(180)
 		
 		base.physicsMgr.attachPhysicalNode(self.player.node())
@@ -86,9 +90,9 @@ class EscapeFromJCMB(object,DirectObject):
 		
 		# Character has a collision sphere
 		col_node = CollisionNode('player')
-		col_node.addSolid(CollisionSphere(0, 0, -1, 1.2))
-		col_node.addSolid(CollisionSphere(0, 0, -2, 1.2))
-		col_node.addSolid(CollisionSphere(0, 0, -3, 1.2))
+		col_node.addSolid(CollisionSphere(0, 0, -1, 1.4))
+		col_node.addSolid(CollisionSphere(0, 0, -3, 1.4))
+		col_node.addSolid(CollisionSphere(0, 0, -5, 1.4))
 		col_node_path = self.player.attachNewNode(col_node)
 		base.cTrav.addCollider(col_node_path, self.pusher)
 		self.pusher.addCollider(col_node_path, self.player, base.drive.node())
@@ -155,7 +159,7 @@ class EscapeFromJCMB(object,DirectObject):
 	    		base.camera.setP(base.camera.getP() - (y - base.win.getYSize()/2) * 0.25)
 		
 		# Update player position
-		self.player_speed = 40
+		self.player_speed = 10
 		new_x = 0.0
 		new_y = 0.0
 		if (self.key_state["left"] == 1):
