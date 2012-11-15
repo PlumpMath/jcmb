@@ -84,16 +84,16 @@ class EscapeFromJCMB(object,DirectObject):
     
     # Tie the camera to the player
     base.camera.reparentTo(self.player)
-    base.camera.setPos(0,0,0)
+    base.camera.setPos(0,0,1.7)
     
     # Stop the annoying default behaviour
     base.disableMouse()
     
     # Character has a collision sphere
     col_node = CollisionNode('player')
-    col_node.addSolid(CollisionSphere(0, 0, -1, 1.4))
-    col_node.addSolid(CollisionSphere(0, 0, -3, 1.4))
-    col_node.addSolid(CollisionSphere(0, 0, -6, 1.4))
+    col_node.addSolid(CollisionSphere(0, 0, 0.34, 0.34))
+    col_node.addSolid(CollisionSphere(0, 0, 1.02, 0.34))
+    col_node.addSolid(CollisionSphere(0, 0, 1.70, 0.34))
     col_node_path = self.player.attachNewNode(col_node)
     base.cTrav.addCollider(col_node_path, self.pusher)
     self.pusher.addCollider(col_node_path, self.player, base.drive.node())
