@@ -1,4 +1,5 @@
 import sys
+import math
 import direct.directbase.DirectStart
 from direct.showbase.DirectObject import DirectObject
 from pandac.PandaModules import *
@@ -48,10 +49,10 @@ class EscapeFromJCMB(object,DirectObject):
 #    debugNP.show()
 #    self.world.setDebugNode(debugNP.node())
 
-#    alight = AmbientLight('alight')
-#    alight.setColor(VBase4(1.0, 1.0, 1.0, 1))
-#    alnp = render.attachNewNode(alight)
-#    render.setLight(alnp)
+    alight = AmbientLight('alight')
+    alight.setColor(VBase4(0.05, 0.05, 0.05, 1))
+    alnp = render.attachNewNode(alight)
+    render.setLight(alnp)
 
   def init_key(self):
 
@@ -93,23 +94,25 @@ class EscapeFromJCMB(object,DirectObject):
 #    stairwell = loader.loadModel('../data/mod/boxroom.egg')
     stairwell = loader.loadModel('../data/mod/jcmbstairs.egg')
     stairwell.reparentTo(render)
-    stairwell.setPos(0,0,0)
+#    stairwell.setPos(0,0,0)
     stairwell_shape = self.egg_to_BulletTriangleMeshShape(stairwell)
     stairwellnode = BulletRigidBodyNode('stairwell')
     stairwellnode.addShape(stairwell_shape)
     self.world.attachRigidBody(stairwellnode)
+
+    print stairwell.getBounds()
 
   def init_player(self):
     # Stop the default mouse behaviour
     base.disableMouse()
     
     # Character has a collision sphere
-    shape = BulletCapsuleShape(0.8, 4.5, ZUp)
+    shape = BulletCapsuleShape(0.2, 1, ZUp)
     self.player = BulletRigidBodyNode('Player')
     self.player.setMass(1.0)
     self.player.addShape(shape)
     self.playernp = render.attachNewNode(self.player)
-    self.playernp.setPos(0, 0, 10)
+    self.playernp.setPos(0, 0, 1)
     self.world.attachRigidBody(self.player)
 
     self.player.setLinearSleepThreshold(0.0)
@@ -117,9 +120,10 @@ class EscapeFromJCMB(object,DirectObject):
 
     # Tie the camera to the player
     base.camera.reparentTo(self.playernp)
-    base.camera.setPos(0,0,4.5)
+    base.camera.setPos(0,0,.5)
     base.camLens.setFov(80)
-    
+    base.camLens.setNear(0.01)
+   
     # Make the torch and attach it to our character
     torch = Spotlight('torch')
     torch.setColor(VBase4(1, 1, 1, 1))
@@ -149,8 +153,7 @@ class EscapeFromJCMB(object,DirectObject):
     playferboxmodel = loader.loadModel('../data/mod/playferbox.egg')
     playferboxmodel.reparentTo(np)
 
-  def update(self,task):
-       
+  def update(self,task):       
     # Update camera orientation
     md = base.win.getPointer(0)
     x = md.getX()
@@ -160,20 +163,51 @@ class EscapeFromJCMB(object,DirectObject):
       base.camera.setP(base.camera.getP() - (y - base.win.getYSize()/2) * 0.25)
     
     # Update player position
-    self.player.clearForces()
-    vel = self.player.getLinearVelocity()
-    direction = Vec3(0,0, vel.getZ())
-    if (self.key_state["left"] == 1):
-      direction.setX(-10.0)
-    if (self.key_state["right"] == 1):
-      direction.setX(10.0)
-    if (self.key_state["up"] == 1):
-      direction.setY(10.0)
-    if (self.key_state["down"] == 1):
-      direction.setY(-10.0)
+#    self.player.clearForces()
+#    old_vel = self.player.getLinearVelocity()
+#    new_vel = Vec3(0,0,old_vel.getZ())
+#    if (self.key_state["left"] == 1):
+#      new_vel.setX(-10.0)
+#    if (self.key_state["right"] == 1):
+#      new_vel.setX(10.0)
+#    if (self.key_state["up"] == 1):
+#      new_vel.setY(10.0)
+#    if (self.key_state["down"] == 1):
+#      new_vel.setY(-10.0)
+#
+#    new_vel = render.getRelativeVector(base.camera, new_vel)
+#    linear_force = (new_vel - old_vel)/(0.01)
+#    self.player.applyCentralForce(linear_force)
 
-    direction = render.getRelativeVector(base.camera, direction)
-    linear_force = (direction - vel)/(0.01)
+    self.player.clearForces()
+    old_vel = self.player.getLinearVelocity()
+    new_vel = Vec3(0,0,0)
+#    if (self.key_state["left"] == 1):
+#      new_vel.setX(-1.0)
+#    if (self.key_state["right"] == 1):
+#      new_vel.setX(1.0)
+#    if (self.key_state["up"] == 1):
+#      new_vel.setY(1.0)
+#    if (self.key_state["down"] == 1):
+#      new_vel.setY(-1.0)
+
+#    new_vel = render.getRelativeVector(base.camera, new_vel)
+    speed = 2
+    if (self.key_state["up"] == 1):
+      new_vel.setX(-speed * math.sin(base.camera.getH() * 3.1415/180.0))
+      new_vel.setY(speed * math.cos(base.camera.getH() * 3.1415/180.0))
+    if (self.key_state["down"] == 1):
+      new_vel.setX(speed * math.sin(base.camera.getH() * 3.1415/180.0))
+      new_vel.setY(-speed * math.cos(base.camera.getH() * 3.1415/180.0))
+    if (self.key_state["left"] == 1):
+      new_vel.setX(-speed * math.sin((base.camera.getH() + 90) * 3.1415/180.0))
+      new_vel.setY(speed * math.cos((base.camera.getH() + 90) * 3.1415/180.0))
+    if (self.key_state["right"] == 1):
+      new_vel.setX(-speed * math.sin((base.camera.getH() - 90) * 3.1415/180.0))
+      new_vel.setY(speed * math.cos((base.camera.getH() - 90) * 3.1415/180.0))
+
+    linear_force = (new_vel - old_vel)/(0.01)
+    linear_force.setZ(0.0)
     self.player.applyCentralForce(linear_force)
 
     return task.cont
@@ -190,4 +224,4 @@ base.setFrameRateMeter(True)
 EscapeFromJCMB()
 render.setShaderAuto()
 
-run() 
+run()
