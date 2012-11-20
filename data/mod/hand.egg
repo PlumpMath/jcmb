@@ -1,0 +1,64 @@
+<CoordinateSystem> { Z-up }
+
+<Comment> { "Egg laid by Chicken for Blender, version R91" }
+
+<Material> Material {
+  <Scalar> diffr {0.800000011921}
+  <Scalar> diffg {0.800000011921}
+  <Scalar> diffb {0.800000011921}
+  <Scalar> specr {0.25}
+  <Scalar> specg {0.25}
+  <Scalar> specb {0.25}
+  <Scalar> shininess {12.5}
+}
+<Texture> hand.png {
+  "./../tex/hand.png"
+  <Scalar> saved-result { 1 }
+  <Scalar> envtype { MODULATE }
+  <Scalar> minfilter { LINEAR }
+  <Scalar> magfilter { LINEAR }
+  <Scalar> wrap { REPEAT }
+}
+<Group> Cube {
+  <Transform> {
+    <Matrix4> {
+      0.050000 0.000000 0.000000 0.000000
+      0.000000 0.050000 0.000000 0.000000
+      0.000000 0.000000 0.050000 0.000000
+      0.000000 0.000000 0.000000 1.000000
+    }
+  }
+  <VertexPool> Cube {
+    <Vertex> 0 {
+      0.0 -0.0499999932945 -0.0500000007451
+      <UV>  {
+        0.000000 0.500000
+        <Tangent> { 0.000000 0.000000 -1.000000 }
+        <Binormal> { -1.000000 0.000000 -0.000000 }
+      }
+    }
+    <Vertex> 1 {
+      0.0499999672174 -0.0500000305474 0.0500000007451
+      <UV>  {
+        1.000000 0.000000
+        <Tangent> { 0.000000 0.000000 -1.000000 }
+        <Binormal> { -1.000000 0.000000 -0.000000 }
+      }
+    }
+    <Vertex> 2 {
+      -0.0500000193715 -0.0499999821186 0.0500000007451
+      <UV>  {
+        1.000000 1.000000
+        <Tangent> { 0.000000 0.000000 -1.000000 }
+        <Binormal> { -1.000000 0.000000 -0.000000 }
+      }
+    }
+  }
+  <Polygon> {
+    <TRef> { hand.png }
+    <MRef> { Material }
+    <Normal> { -0.000000 -1.000000 -0.000000
+    }
+    <VertexRef> { 0 1 2 <Ref> { Cube } }
+  }
+}

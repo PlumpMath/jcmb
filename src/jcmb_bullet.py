@@ -312,7 +312,7 @@ class EscapeFromJCMB(object,DirectObject):
       new_hand_pos = LPoint3f(render.getRelativePoint(base.camera, Vec3(0,0.5,0)))
       diff = new_hand_pos - self.handnp.getPos()
       self.hand.applyCentralForce(diff * 1000 - self.hand.getLinearVelocity()*100)
-      if diff.length() > .7:
+      if diff.length() > .6:
         self.player.setLinearVelocity(Vec3(0,0,0))
 
     # Identify what lies beneath the player's hand (unless player is holding something)
