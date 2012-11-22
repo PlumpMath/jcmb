@@ -3,7 +3,13 @@ Utility functions that will be used by lots of code.
 
 """
 
-def jesus():
-  return "jumping superchrist"
+gDirs = {
+  "mod" : "../data/mod",
+  "map" : "../data/map",
+}
+
+# In case we miss out a / in the path
+for key,itm in gDirs.iteritems():
+  itm += "/"
 
 

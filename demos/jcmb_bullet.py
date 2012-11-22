@@ -102,8 +102,8 @@ class EscapeFromJCMB(object,DirectObject):
     mesh = BulletTriangleMesh()
     for collisionNP in modelnp.findAllMatches('**/+CollisionNode'):
       collisionNode = collisionNP.node()
-    for collisionPolygon in collisionNode.getSolids():
-	tri_points = collisionPolygon.getPoints()
+      for collisionPolygon in collisionNode.getSolids():
+        tri_points = collisionPolygon.getPoints()
         mesh.addTriangle(tri_points[0],tri_points[1],tri_points[2])
     shape = BulletTriangleMeshShape(mesh, dynamic=False) 
     return shape
