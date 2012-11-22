@@ -120,9 +120,6 @@ class EscapeFromJCMB(object,DirectObject):
     # Stop the default mouse behaviour
     base.disableMouse()
 
-    self.oldmx = 0
-    self.oldmy = 0
-    
     # Character has a capsule shape
     shape = BulletCapsuleShape(0.2, 1, ZUp)
     self.player = BulletRigidBodyNode('Player')
@@ -198,11 +195,6 @@ class EscapeFromJCMB(object,DirectObject):
     self.hand_text_np.setBillboardPointEye()
     self.hand_text_np.hide()
 
-
-
-    new_hand_pos = LPoint3f(render.getRelativePoint(base.camera, Vec3(0,1,0)))
-    self.handnp.setPos(new_hand_pos)
-
     # Disable the depth testing for the hand and the text - we always want these things on top, with no clipping
     self.handnp.setDepthTest(False)
     self.hand_text_np.setDepthTest(False)
@@ -241,22 +233,6 @@ class EscapeFromJCMB(object,DirectObject):
 
   def update(self,task):       
     # Update camera orientation
-#    md = base.win.getPointer(0)
-#    mx = md.getX()
-#    my = md.getY()
-#    around_z = (self.oldmx - mx)
-#    around_x = (self.oldmy - my)
-#    motion = Vec3(around_x, 0.0, around_z)
-#    self.head.setAngularVelocity(motion)
-#    self.oldmx = mx
-#    self.oldmy = my
-#
-#    if base.win.movePointer(0, base.win.getXSize()/2, base.win.getYSize()/2):
-#      around_z = (base.win.getXSize()/2 - x)
-#      around_x = (base.win.getYSize()/2 - y)
-#      motion = Vec3(around_x, 0.0, around_z)
-#      self.head.setAngularVelocity(motion)
-
     md = base.win.getPointer(0)
     mouse_x = md.getX()
     mouse_y = md.getY()
@@ -295,15 +271,10 @@ class EscapeFromJCMB(object,DirectObject):
       new_vel.setX(-speed * math.sin((base.camera.getH() + dir) * 3.1415/180.0))
       new_vel.setY(speed * math.cos((base.camera.getH() + dir) * 3.1415/180.0))
 
-    if self.player_is_grabbing == True:
-      timescale = 0.001
-    else:
-      timescale = 0.001
-
+    timescale = 0.001
     linear_force = (new_vel - old_vel)/(timescale)
     linear_force.setZ(0.0)
     self.player.applyCentralForce(linear_force)
-
     
     if self.player_is_grabbing == False:
       new_hand_pos = LPoint3f(render.getRelativePoint(base.camera, Vec3(0,0.2,0)))
@@ -312,7 +283,7 @@ class EscapeFromJCMB(object,DirectObject):
       new_hand_pos = LPoint3f(render.getRelativePoint(base.camera, Vec3(0,0.5,0)))
       diff = new_hand_pos - self.handnp.getPos()
       self.hand.applyCentralForce(diff * 1000 - self.hand.getLinearVelocity()*100)
-      if diff.length() > .6:
+      if diff.length() > .5:
         self.player.setLinearVelocity(Vec3(0,0,0))
 
     # Identify what lies beneath the player's hand (unless player is holding something)
@@ -353,7 +324,7 @@ class EscapeFromJCMB(object,DirectObject):
               self.world.attachConstraint(self.cs)
 
               # Stop the held object swinging all over the place
-              result.getNode().setAngularDamping(1.0)
+              result.getNode().setAngularDamping(0.7)
       else:
         self.hand_text_np.hide()
         self.player_is_grabbing = False
