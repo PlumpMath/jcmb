@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.47 r22583"
-   sodipodi:docname="New document 1">
+   sodipodi:docname="blueprint.svg">
   <defs
      id="defs4">
     <inkscape:perspective
@@ -40,9 +40,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.979899"
-     inkscape:cx="328.21301"
-     inkscape:cy="560.74103"
+     inkscape:zoom="3.959798"
+     inkscape:cx="257.1813"
+     inkscape:cy="557.11046"
      inkscape:document-units="px"
      inkscape:current-layer="layer2"
      showgrid="false"
@@ -82,5 +82,14 @@
   <g
      inkscape:groupmode="layer"
      id="layer2"
-     inkscape:label="Ground Floor" />
+     inkscape:label="Ground Floor">
+    <path
+       style="opacity:0.68354426000000001;fill:#ff4800;fill-opacity:0.47826087;stroke:#a70000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       d="M 188.40625 20.8125 L 194.46875 93.5625 L 179.8125 95.5625 L 177.78125 70.3125 L 156.0625 71.84375 L 161.625 124.375 L 174.75 122.84375 L 178.28125 153.15625 L 203.03125 149.125 L 229.3125 155.1875 L 237.375 135.46875 L 254.5625 142.5625 L 248.5 159.71875 L 272.25 178.90625 L 285.375 166.78125 L 298.5 186 L 277.78125 198.09375 L 286.875 225.375 L 313.65625 223.375 L 314.15625 286.625 L 314.65625 325.53125 L 100 325.53125 L 100 506.25 L 179.65625 506.25 L 179.65625 708.375 L 216.4375 708.375 L 216.4375 718.75 L 285.34375 718.75 L 285.34375 506.59375 L 423.9375 506.59375 L 423.9375 726.59375 L 495 726.59375 L 495 734.4375 L 679.28125 734.4375 L 679.28125 727.65625 L 753.9375 727.65625 L 753.9375 695.875 L 988.21875 695.875 L 988.21875 286.625 L 386.875 286.625 L 386.375 248.625 L 431.34375 247.09375 L 431.84375 226.40625 L 402.03125 124.375 L 387.40625 103.15625 L 378.8125 108.71875 L 309.625 37.5 L 303.03125 50.125 L 283.84375 41.03125 L 188.40625 20.8125 z M 500.03125 507.21875 L 671.75 507.21875 L 671.75 644.09375 L 500.03125 644.09375 L 500.03125 507.21875 z "
+       id="path2912" />
+    <path
+       style="fill:#82100f;stroke:#000000;stroke-width:3;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;stroke-miterlimit:4;stroke-dasharray:none;fill-opacity:1"
+       d="m 385.3732,248.36212 -71.21576,0"
+       id="path3689" />
+  </g>
 </svg>
