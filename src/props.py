@@ -4,8 +4,14 @@ Base modules for game props.
 """
 
 class Prop:
+  """Your basic, static prop."""
 
-class GrabbableProp(Prop):
+  def __init__(self, mdl_np):
+  
+
+class DynamicProp(Prop):
+
+class GrabbableProp(DynamicProp):
 
 
 
