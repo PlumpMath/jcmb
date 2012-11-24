@@ -34,9 +34,37 @@ class Map:
     self.bw.attachRigidBody(self.wall_rigid_node)
 
 
-  def init_props():
+  def init_props(self):
 
-      
-      
+    # Make Playfer Box
+    shape = BulletBoxShape(Vec3(0.25, 0.25, 0.25))
+    node = BulletRigidBodyNode('Playfer Box')
+    node.setMass(110.0)
+    node.setFriction(1.0)
+    node.addShape(shape)
+    node.setAngularDamping(0.0)
+    np = render.attachNewNode(node)
+    np.setPos(-1.4, 1.7, -1.7)
+    self.world.attachRigidBody(node)
+    playferboxmodel = loader.loadModel('../data/mod/playferbox.egg')
+    playferboxmodel.reparentTo(np)
 
+    # Make Pendlepot
+    shape = BulletBoxShape(Vec3(0.2, 0.15, 0.1))
+    node = BulletRigidBodyNode('Pendlepot')
+    node.setMass(5.0)
+    node.setFriction(1.0)
+    node.addShape(shape)
+    node.setAngularDamping(0.0)
+    np = render.attachNewNode(node)
+    np.setPos(-1.4, 1.7, -1.5)
+    self.world.attachRigidBody(node)
+    pendlepotmodel = loader.loadModel('../data/mod/pendlepot.egg')
+    pendlepotmodel.reparentTo(np)
+
+  def init_lights(self):
+    alight = AmbientLight('alight')
+    alight.setColor(VBase4(0.05, 0.05, 0.05, 1))
+    alnp = render.attachNewNode(alight)
+    render.setLight(alnp)
 

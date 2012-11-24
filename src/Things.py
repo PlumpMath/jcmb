@@ -1,3 +1,5 @@
+# All objects, animate or not, are Things with a name, a visible geometry (optional), a collision shape,
+# and a behaviour if another thing tries to "grab" them
 class Thing:
         name = 'Unnamed'
         model = None
@@ -26,8 +28,10 @@ class Sentient:
         def updateAI(self):
                 raise NotImplementedError("This method has not been implemented.")
 
+	def grab(self, thing):
+                raise NotImplementedError("This method has not been implemented.")
+
 class NPC(Thing, Sentient):
         alive = True
         def is_alive(self):
                 return alive
-
