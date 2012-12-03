@@ -4,7 +4,7 @@ Classes and methods for setting up a map.
 """
 
 import util
-from props import *
+import props
 from pandac.PandaModules import *
 from panda3d.bullet import *
 
@@ -14,8 +14,8 @@ class Map:
     self.np = loader.loadModel(util.dirs["map"]+map_path)
     self.bw = blt_world
     self.init_walls()
-    self.init_props()
-    self.init_lights()
+    self.init_props()         # self.props
+    self.init_lights()        # self.lights
     self.init_player_spawn()
 
   def init_walls():
@@ -42,5 +42,20 @@ class Map:
     self.props = []
     prop_npc = self.np.findAllMatches("**/=class=prop*")
     for prop_np in prop_npc.asList():
-      self.props.append(
+      prop_node = prop_np.node()
+      ptype = prop_node.getTag("class")
+      # Create a prop object by looking up the type map (this should be nicer
+      #  than a massive if/elif block.)
+      #  But note this might cause the very gods themselves to rain pain and 
+      #  suffering down upon our tormented souls for millenia to come.
+      # Pass the node path as well so it can position itself/sort out bullet
+      #  collision stuff.
+      self.props.append(getattr(props, props.types[ptype])(prop_np))
       
+  def init_lights():
+    """
+    Initialise all the dynamic lighting. Defining which (static) props
+    get lit by dynamic lighting should happen here as well.
+    """
+
+    self.lights = []

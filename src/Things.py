@@ -25,7 +25,7 @@ class Thing:
                 raise NotImplementedError("This method has not been implemented.")
 
 class Sentient:
-        def updateAI(self):
+        def update(self):
                 raise NotImplementedError("This method has not been implemented.")
 
 	def grab(self, thing):

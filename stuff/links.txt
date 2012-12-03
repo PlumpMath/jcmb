@@ -1,0 +1,6 @@
+Useful links...
+
+Clipping, fog and skyboxes:
+  http://www.panda3d.org/forums/viewtopic.php?t=3275
+
+
