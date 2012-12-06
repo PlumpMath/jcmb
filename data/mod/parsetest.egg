@@ -773,7 +773,10 @@
     }
   }
   <Group> Sphere {
-    <Tag> class { prop_dyn }
+    <Tag> class { prop }
+    <Tag> type  { dynamic }
+    <Tag> flags { grab }
+    <Tag> bullet_shape { sphere }
     <Transform> {
       <Matrix4> {
         1.000 0.000 0.000 0.000 
@@ -2869,7 +2872,8 @@
     }
   }
   <Group> Cube {
-    <Tag> class { prop_static }
+    <Tag> class { prop }
+    <Tag> type  { static }
     <Transform> {
       <Matrix4> {
         1.000 0.000 0.000 0.000 

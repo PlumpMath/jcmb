@@ -5,6 +5,7 @@ class Thing:
   model = None
   nodepath = None
   collision_node = None
+  flags = []
 
   def get_name(self):
     return self.name
@@ -19,7 +20,7 @@ class Thing:
     return self.collision_node
 
   def is_grabbable(self):
-    raise NotImplementedError("This method has not been implemented and it damn well should have.")
+    return ("grab" in self.flags)
 
   def on_grab(self):
     raise NotImplementedError("This method has not been implemented and it damn well should have.")

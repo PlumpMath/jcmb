@@ -4,9 +4,55 @@ from pandac.PandaModules import *
 from panda3d.bullet import *
 from Things import *
 
-class PropFactory:
-  def __init__(self, pos):
-    pass
+class DynamicProp(Thing):
+
+  @classmethod
+  def DynamicPropFactory(node):
+    name       = node.getTag("name")
+    str_flags  = node.getTag("flags")
+    str_mass   = node.getTag("mass")
+    str_fric   = node.getTag("fric")
+    str_shape  = node.getTag("bullet_shape")
+    str_model  = node.getTag("model")
+
+    model_file = str_model if str_model else None
+    mass = float(str_mass) if str_mass else 1.0
+    fric = float(str_fric) if str_fric else 1.0
+    flags = str_flags.split(",")
+
+    # Decide on the collision geometry
+    if str_shape == "sphere":
+      r = node.getBounds().getRadius()
+      shape = BulletSphereShape(r)
+    elif str_shape == "box":
+      pmin, pmax = node.getTightBounds()
+      shape = BulletBoxShape(pmax-pmin)
+      
+    # Make the shiz
+    return DynamicProp(name, node, shape, mass, fric, flags, model_file)
+
+  def __init__(self, name, node, bullet_shape, mass, fric, set_flags, model_file=None):
+    self.name = name
+    self.trans = node.getTransform()
+
+    shape = bullet_shape
+    bnode = BulletRigidBodyNode(name)
+    bnode.setMass(mass)
+    bnode.setFriction(fric)
+    bnode.addShape(shape, self.trans)
+    bnode.setAngularDamping(0.0) #?    
+
+    np = NodePath(bnode)
+    np.setPos(self.trans.getPos())
+    
+    if model_file:
+      self.model = loader.loadModel(model_file)
+      self.model.reparentTo(np)
+
+    self.nodepath = np
+    self.collision_node = bnode
+
+    self.flags = set_flags
 
 class PlayferBox(Thing):
 
