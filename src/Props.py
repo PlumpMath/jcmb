@@ -1,7 +1,12 @@
+
 import util
 from pandac.PandaModules import *
 from panda3d.bullet import *
-from Thing import *
+from Things import *
+
+class PropFactory:
+  def __init__(self, pos):
+    pass
 
 class PlayferBox(Thing):
 
