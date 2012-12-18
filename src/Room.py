@@ -96,6 +96,7 @@ class Room(Thing):
         self.props.append(PropFactory(ptype))
     # Make up some random props for illustration purposes
     self.props.append(PlayferBox(Vec3(-1.4, 1.7, -1.7)))
+    self.props.append(NewPlayferBox(Vec3(-1.2, 1.5, -1.7)))
 
     # Make Pendlepot
 #   shape = BulletBoxShape(Vec3(0.2, 0.15, 0.1))
@@ -124,6 +125,7 @@ class Room(Thing):
 
     # Now add all the props
     for prop in self.props:
+      print prop.name
       prop.get_nodepath().reparentTo(daddy_node)
       bullet_world.attachRigidBody(prop.get_collision_node())
 
