@@ -10,6 +10,8 @@ from Room import *
 class Player(DirectObject):
   camera = None
   speed = 3
+  jump_stage = 0
+  jump_max = 5
   player_is_grabbing = False
   cs = None
   node = None
@@ -93,7 +95,7 @@ class Player(DirectObject):
 
   def init_key(self):
     # Stores the state of the keys, 1 for pressed and 0 for unpressed
-    self.key_state = {'up':False, 'right':False, 'down':False, 'left':False}
+    self.key_state = {'up':False, 'right':False, 'down':False, 'left':False, 'jump':False}
 
     # Assign the key event handler
     self.accept('w', self.set_key_state, ['up',True])
@@ -104,6 +106,8 @@ class Player(DirectObject):
     self.accept('s-up', self.set_key_state, ['down',False])
     self.accept('a', self.set_key_state, ['left',True])
     self.accept('a-up', self.set_key_state, ['left',False])
+    self.accept('space', self.set_key_state, ['jump',True])
+    self.accept('space-up', self.set_key_state, ['jump',False])
 
     # Stores the state of the mouse buttons, 1 for pressed and 0 for unpressed
     self.mouse_state = {'left_click':False, 'right_click':False}
@@ -145,18 +149,37 @@ class Player(DirectObject):
    
     # Update player position
     player_is_moving = False
-    if (self.key_state["up"] == True):
+    if self.key_state["up"] == True:
       player_is_moving = True
       dir = 0
-    if (self.key_state["down"] == True):
+    if self.key_state["down"] == True:
       player_is_moving = True
       dir = 180
-    if (self.key_state["left"] == True):
+    if self.key_state["left"] == True:
       player_is_moving = True
       dir = 90
-    if (self.key_state["right"] == True):
+    if self.key_state["right"] == True:
       player_is_moving = True
       dir = 270
+
+    # Allow jumping iff character is standing on something
+    if self.key_state["jump"] == True:
+      if self.jump_stage == 0:
+        # If player is not jumping, check whether player can jump (is standing on something)
+        ray_from = self.nodepath.getPos()
+        ray_to = ray_from + Vec3(0,0,-1)
+        result = self.bulletworld.rayTestClosest(ray_from, ray_to)
+        if result.hasHit() == True:
+          self.jump_stage = 1
+
+      else:
+        vel = self.node.getLinearVelocity()
+        vel.setZ(vel.getZ() + (self.jump_max - self.jump_stage) * .2)
+        self.node.setLinearVelocity(vel)
+        self.jump_stage += 1
+        if self.jump_stage > self.jump_max:
+          self.jump_stage = 0
+
 
     self.node.clearForces()
     old_vel = self.node.getLinearVelocity()
@@ -242,3 +265,4 @@ class Player(DirectObject):
       self.hand_text_np.hide()
 
     return task.cont
+
