@@ -114,6 +114,11 @@ class Player(DirectObject):
     self.accept('mouse2', self.set_mouse_state, ['right_click',True])
     self.accept('mouse2-up', self.set_mouse_state, ['right_click',False])
 
+    self.accept('c', self.print_pos, [])
+
+  def print_pos(self):
+    print self.nodepath.getPos()
+
   def set_key_state(self, key, state):
     self.key_state[key] = state
 

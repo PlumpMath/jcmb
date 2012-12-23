@@ -95,8 +95,11 @@ class Room(Thing):
       else:
         self.props.append(PropFactory(ptype))
     # Make up some random props for illustration purposes
-    self.props.append(PlayferBox(Vec3(-1.4, 1.7, -1.7)))
-    self.props.append(NewPlayferBox(Vec3(-1.2, 1.5, -1.7)))
+#    self.props.append(PlayferBox(Vec3(-1.4, 1.7, -1.7)))
+
+
+    self.props.append(NewPlayferBox(Vec3(-0.25, 1.44, -1)))
+#    self.props.append(NewPlayferBox(Vec3(0, 0, 0)))
 
     # Make Pendlepot
 #   shape = BulletBoxShape(Vec3(0.2, 0.15, 0.1))
@@ -135,4 +138,3 @@ class Room(Thing):
     for prop in props:
       prop.get_nodepath().detachNode()
       bullet_world.remove(prop.get_collision_node())
-

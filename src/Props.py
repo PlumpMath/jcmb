@@ -1,4 +1,3 @@
-
 import util
 from pandac.PandaModules import *
 from panda3d.bullet import *
@@ -41,13 +40,11 @@ class DynamicProp(Thing):
     bnode = BulletRigidBodyNode(name)
     bnode.setMass(mass)
     bnode.setFriction(fric)
-    bnode.addShape(shape, self.trans)
+    bnode.addShape(shape)
     bnode.setAngularDamping(0.0) #?    
 
     np = NodePath(bnode)
     np.setPos(self.trans.getPos())
-
-    print "BALLS POS:", np.getPos()
     
     if model_file:
       self.model = loader.loadModel(model_file)
