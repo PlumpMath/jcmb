@@ -1,8 +1,6 @@
 jcmb
 ====
 
-Escape from JCMB
+Escape from JCMB. Potentially a terrifying game, someday, maybe.
 
-Time to panic your face off
-
-Disgusting filthy balls
+Uses the Panda3D game engine.
